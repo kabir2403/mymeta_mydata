@@ -1,0 +1,42 @@
+name: Daily AI Feature Generation
+
+on:
+  schedule:
+    # Run at 2 AM UTC every day
+    - cron: '0 2 * * *'
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  generate-features:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Run AI Orchestration
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          NEXTAUTH_URL: ${{ secrets.APP_URL || 'http://localhost:3000' }}
+        run: |
+          npm run build
+          npm run start &
+          sleep 5
+          curl -X POST http://localhost:3000/api/orchestrate
+      
+      - name: Commit changes
+        run: |
+          git config --local user.email "ai@mymeta.dev"
+          git config --local user.name "AI Feature Manager"
+          git add -A
+          git diff --quiet && git diff --staged --quiet || git commit -m "🤖 Auto: Generated features on $(date +'%Y-%m-%d')"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

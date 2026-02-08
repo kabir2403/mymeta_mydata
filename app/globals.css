@@ -1,0 +1,9 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: Inter, Arial, sans-serif;
+}
+
+a { color: inherit; text-decoration: underline; }
+
+/* keep small defaults; layout uses utility classes (Tailwind) */
