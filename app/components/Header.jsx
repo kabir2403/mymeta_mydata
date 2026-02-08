@@ -8,7 +8,7 @@ export default function Header() {
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center text-white font-bold">A</div>
           <div>
-            <Link href="/" className="text-lg font-semibold">Accessibility AI</Link>
+            <Link href="/" className="text-lg font-semibold">Kabir</Link>
             <div className="text-xs text-slate-400">AI-powered website accessibility checks</div>
           </div>
         </div>
