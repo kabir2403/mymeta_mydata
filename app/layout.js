@@ -1,7 +1,7 @@
 import './globals.css'
 
 export const metadata = {
-  title: 'Accessibility AI',
+  title: 'Accessibility Kabir AI',
   description: 'AI-powered website accessibility checks',
 }
 
