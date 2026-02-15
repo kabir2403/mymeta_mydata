@@ -1,26 +1,20 @@
-import './globals.css'
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
+import './globals.css';
+import { Inter } from 'next/font/google';
+import MainLayout from './components/MainLayout';
+
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: 'CricLive - Real-time Cricket Updates',
-  description: 'Live cricket scores, news, and match schedules',
-}
+    title: 'HisaabKitaab - Finance & Subscription Tracker',
+    description: 'Track your monthly expenses and subscriptions privately.',
+};
 
 export default function RootLayout({ children }) {
-  return (
-    <html lang="en">
-      <head>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet" />
-      </head>
-      <body className="bg-emerald-950 text-white selection:bg-emerald-500 selection:text-white flex flex-col min-h-screen">
-        <Navbar />
-        <main className="flex-grow">
-          {children}
-        </main>
-        <Footer />
-      </body>
-    </html>
-  )
+    return (
+        <html lang="en">
+            <body className={`${inter.className} bg-slate-950 text-slate-100 min-h-screen`}>
+                <MainLayout>{children}</MainLayout>
+            </body>
+        </html>
+    );
 }
