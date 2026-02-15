@@ -15,6 +15,43 @@ export default function SnakeGame() {
     const [isPlaying, setIsPlaying] = useState(false);
     const [highScore, setHighScore] = useState(0);
 
+    // Swipe Handling
+    const [touchStart, setTouchStart] = useState(null);
+    const [touchEnd, setTouchEnd] = useState(null);
+
+    // Minimum swipe distance
+    const minSwipeDistance = 50;
+
+    const onTouchStart = (e) => {
+        setTouchEnd(null);
+        setTouchStart({ x: e.targetTouches[0].clientX, y: e.targetTouches[0].clientY });
+    };
+
+    const onTouchMove = (e) => {
+        setTouchEnd({ x: e.targetTouches[0].clientX, y: e.targetTouches[0].clientY });
+    };
+
+    const onTouchEnd = () => {
+        if (!touchStart || !touchEnd) return;
+
+        const distanceX = touchStart.x - touchEnd.x;
+        const distanceY = touchStart.y - touchEnd.y;
+        const isLeftSwipe = distanceX > minSwipeDistance;
+        const isRightSwipe = distanceX < -minSwipeDistance;
+        const isUpSwipe = distanceY > minSwipeDistance;
+        const isDownSwipe = distanceY < -minSwipeDistance;
+
+        if (Math.abs(distanceX) > Math.abs(distanceY)) {
+            // Horizontal
+            if (isLeftSwipe && direction !== 'RIGHT') setDirection('LEFT');
+            if (isRightSwipe && direction !== 'LEFT') setDirection('RIGHT');
+        } else {
+            // Vertical
+            if (isUpSwipe && direction !== 'DOWN') setDirection('UP');
+            if (isDownSwipe && direction !== 'UP') setDirection('DOWN');
+        }
+    };
+
     // Generate random food position not on snake
     const generateFood = useCallback(() => {
         let newFood;
@@ -119,11 +156,16 @@ export default function SnakeGame() {
     }, [direction]);
 
     return (
-        <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center p-4">
+        <div
+            className="min-h-screen bg-slate-900 flex flex-col items-center justify-center p-4 touch-none"
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+        >
             <Link href="/" className="absolute top-4 left-4 text-slate-400 hover:text-white">&larr; Back to Cricket</Link>
 
             <h1 className="text-4xl font-bold text-emerald-400 mb-2">Secret Snake Game 🐍</h1>
-            <p className="text-slate-400 mb-6">Use arrow keys to play!</p>
+            <p className="text-slate-400 mb-6">Swipe or use arrows to play!</p>
 
             <div className="relative bg-slate-800 border-4 border-slate-700 rounded-lg shadow-2xl overflow-hidden"
                 style={{ width: 400, height: 400 }}>
@@ -134,7 +176,7 @@ export default function SnakeGame() {
                         <h2 className="text-3xl font-bold text-red-500 mb-4">Game Over!</h2>
                         <p className="text-white text-xl mb-6">Score: {score}</p>
                         <button
-                            onClick={resetGame}
+                            onPointerDown={resetGame}
                             className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-3 px-8 rounded-full transition-transform hover:scale-105"
                         >
                             Play Again
@@ -146,7 +188,7 @@ export default function SnakeGame() {
                 {!isPlaying && !gameOver && (
                     <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center z-10">
                         <button
-                            onClick={resetGame}
+                            onPointerDown={resetGame}
                             className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-3 px-8 rounded-full transition-transform hover:scale-105"
                         >
                             Start Game
@@ -189,14 +231,26 @@ export default function SnakeGame() {
                 <div>High Score: {highScore}</div>
             </div>
 
-            {/* Mobile Controls */}
-            <div className="mt-8 grid grid-cols-3 gap-2 md:hidden">
+            {/* On-Screen Controls (Visible on all touch devices, using Pointer events) */}
+            <div className="mt-8 grid grid-cols-3 gap-2 touch-none">
                 <div></div>
-                <button onClick={() => direction !== 'DOWN' && setDirection('UP')} className="bg-slate-700 p-4 rounded-lg active:bg-slate-600">⬆️</button>
+                <button
+                    onPointerDown={(e) => { e.preventDefault(); if (direction !== 'DOWN') setDirection('UP'); }}
+                    className="bg-slate-700 p-4 rounded-lg active:bg-slate-600 active:scale-95 transition-transform select-none"
+                >⬆️</button>
                 <div></div>
-                <button onClick={() => direction !== 'RIGHT' && setDirection('LEFT')} className="bg-slate-700 p-4 rounded-lg active:bg-slate-600">⬅️</button>
-                <button onClick={() => direction !== 'UP' && setDirection('DOWN')} className="bg-slate-700 p-4 rounded-lg active:bg-slate-600">⬇️</button>
-                <button onClick={() => direction !== 'LEFT' && setDirection('RIGHT')} className="bg-slate-700 p-4 rounded-lg active:bg-slate-600">➡️</button>
+                <button
+                    onPointerDown={(e) => { e.preventDefault(); if (direction !== 'RIGHT') setDirection('LEFT'); }}
+                    className="bg-slate-700 p-4 rounded-lg active:bg-slate-600 active:scale-95 transition-transform select-none"
+                >⬅️</button>
+                <button
+                    onPointerDown={(e) => { e.preventDefault(); if (direction !== 'UP') setDirection('DOWN'); }}
+                    className="bg-slate-700 p-4 rounded-lg active:bg-slate-600 active:scale-95 transition-transform select-none"
+                >⬇️</button>
+                <button
+                    onPointerDown={(e) => { e.preventDefault(); if (direction !== 'LEFT') setDirection('RIGHT'); }}
+                    className="bg-slate-700 p-4 rounded-lg active:bg-slate-600 active:scale-95 transition-transform select-none"
+                >➡️</button>
             </div>
         </div>
     );
