@@ -1,10 +1,6 @@
 import OpenAI from 'openai';
 import { NextResponse } from 'next/server';
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-});
-
 export async function POST(request) {
     let match;
     try {
@@ -14,6 +10,11 @@ export async function POST(request) {
         if (!match) {
             return NextResponse.json({ error: 'Match data is required' }, { status: 400 });
         }
+
+        // Initialize OpenAI inside the handler to prevent build-time errors if env var is missing
+        const openai = new OpenAI({
+            apiKey: process.env.OPENAI_API_KEY || 'dummy_key_for_build',
+        });
 
         const prompt = `
       You are an energetic cricket commentator.
