@@ -1,11 +1,9 @@
 export default function Footer() {
   return (
-    <footer className="mt-12 border-t border-white/5 bg-gradient-to-t from-black/20 to-transparent">
-      <div className="max-w-6xl mx-auto px-6 py-6 text-sm text-slate-400 flex justify-between">
-        <div>© {new Date().getFullYear()} Accessibility AI</div>
-        <div>
-          Built with care • <a href="https://www.w3.org/WAI/standards-guidelines/wcag/" className="text-slate-300">WCAG</a>
-        </div>
+    <footer className="mt-auto border-t border-white/5 bg-black/20 backdrop-blur-sm py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-sm text-center text-slate-400">
+        <p>&copy; {new Date().getFullYear()} CricLive. All rights reserved.</p>
+        <p className="mt-2 text-xs text-slate-500">Real-time scores and updates for cricket fans everywhere.</p>
       </div>
     </footer>
   );
