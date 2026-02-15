@@ -30,6 +30,9 @@ export default function Homepage() {
               <Link href="/matches" className="bg-white/10 hover:bg-white/20 text-white font-semibold py-3 px-6 rounded-lg transition-colors backdrop-blur-sm border border-white/10 inline-block text-center">
                 Match Schedule
               </Link>
+              <Link href="/game" className="bg-emerald-800/50 hover:bg-emerald-700/50 text-emerald-200 font-semibold py-3 px-6 rounded-lg transition-colors backdrop-blur-sm border border-emerald-500/30 inline-block text-center flex items-center gap-2">
+                <span>🐍</span> Play Game
+              </Link>
             </div>
           </div>
         </div>
